@@ -7,6 +7,8 @@ services:
       - "8004:8000"
     volumes:
       - db_data:/app/data
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=sqlite:////app/data/denview.db
     restart: unless-stopped
