@@ -2,9 +2,9 @@ import secrets
 from datetime import datetime
 from typing import Optional
 from sqlmodel import Session, select
-from src.models.task import Task, TaskStatus
-from src.models.schemas import TaskCreate, TaskStatusUpdate
-from src.crud.agent import create_agent
+from denview.models.task import Task, TaskStatus
+from denview.models.schemas import TaskCreate, TaskStatusUpdate
+from denview.crud.agent import create_agent
 
 
 def create_task(session: Session, user_id: int, data: TaskCreate) -> Task:

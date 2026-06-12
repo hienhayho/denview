@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Response
-from src.apis.deps import SessionDep, CurrentUser
-from src.models.user_schemas import LoginRequest, TokenResponse, UserRead, UserCreate
-from src.crud.user import get_user_by_username, create_user
-from src.core.security import verify_password, create_access_token
+from denview.apis.deps import SessionDep, CurrentUser
+from denview.models.user_schemas import LoginRequest, TokenResponse, UserRead, UserCreate
+from denview.crud.user import get_user_by_username, create_user
+from denview.core.security import verify_password, create_access_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

@@ -61,25 +61,43 @@ Next.js UI
 
 ## Installation
 
-**Requirements:** Python 3.11+, Node.js 18+, pnpm
+### From PyPI (recommended)
 
-### Backend
+**Requirements:** Python 3.11+
 
 ```bash
-# from repo root
-uv sync
+pip install denview
 denview serve --port 8000
 ```
 
 On first boot the server creates an `admin` user with password `admin`. Change it immediately.
 
-### Frontend
+The UI is bundled separately. Run it via Docker (recommended) or clone the repo and run `pnpm dev`.
+
+### Docker (quickstart)
 
 ```bash
+docker compose up
+```
+
+Backend on `http://localhost:8004`, frontend on `http://localhost:3009`.
+
+### From source
+
+**Requirements:** Python 3.11+, Node.js 22+, pnpm
+
+```bash
+git clone https://github.com/your-org/denview
+cd denview
+
+# backend
+uv sync
+denview serve --port 8000
+
+# frontend (separate terminal)
 cd ui
 pnpm install
-pnpm dev                      # development
-pnpm build && pnpm start      # production
+pnpm dev
 ```
 
 Set the backend URL in `ui/.env.local`:
@@ -94,17 +112,21 @@ BACKEND_URL=http://localhost:8000
 
 ### 1. Create an API key
 
-Log in at `http://localhost:3000`, go to **API Keys**, and create a key.
+Log in at `http://localhost:3009`, go to **API Keys**, and create a key.
 
 ### 2. Instrument your agents
 
+```bash
+pip install denview
+```
+
 ```python
-from src.sdk import DenView
+from denview.sdk import DenView
 
 dv = DenView(
     api_key="your-api-key",
-    backend_url="http://localhost:8000",
-    frontend_url="http://localhost:3000",
+    backend_url="http://localhost:8004",
+    frontend_url="http://localhost:3009",
 )
 
 task = await dv.start_task(
@@ -126,7 +148,15 @@ await task.finish()
 await dv.aclose()
 ```
 
-### 3. Embed the office view
+### 3. Resume an existing task
+
+```python
+task = await dv.get_task(task_id=42)
+print(task.embed_url)
+print(task.data.status)
+```
+
+### 4. Embed the office view
 
 ```html
 <iframe src="<task.embed_url>" width="100%" height="500"></iframe>

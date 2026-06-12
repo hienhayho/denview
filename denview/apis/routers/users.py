@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from src.apis.deps import SessionDep, CurrentUser
-from src.models.user_schemas import (
+from denview.apis.deps import SessionDep, CurrentUser
+from denview.models.user_schemas import (
     UserCreate, UserRead, UserUpdate,
     APIKeyCreate, APIKeyRead, APIKeyReadSafe,
 )
-from src.crud.user import (
+from denview.crud.user import (
     create_user, get_user, list_users, update_user,
     create_api_key, get_api_key, list_api_keys, revoke_api_key,
 )

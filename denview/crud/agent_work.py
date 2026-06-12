@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Optional
 from sqlmodel import Session, select
-from src.models.task import AgentWork, WorkStatus
-from src.models.schemas import AgentWorkCreate, AgentWorkUpdate
+from denview.models.task import AgentWork, WorkStatus
+from denview.models.schemas import AgentWorkCreate, AgentWorkUpdate
 
 
 def create_agent_work(session: Session, agent_id: int, task_id: int, data: AgentWorkCreate) -> AgentWork:

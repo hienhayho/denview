@@ -85,5 +85,50 @@ class DenView:
             agents=agent_objects,
         )
 
+    async def get_task(self, task_id: int) -> Task:
+        res = await self._http.get(f"/tasks/{task_id}")
+        if not res.is_success:
+            raise APIError(res.status_code, res.text)
+        d = res.json()
+        task_data = TaskData(
+            id=d["id"],
+            user_id=d["user_id"],
+            name=d["name"],
+            description=d.get("description"),
+            status=TaskStatus(d["status"]),
+            agent_count=d["agent_count"],
+            view_token=d["view_token"],
+            created_at=datetime.fromisoformat(d["created_at"]),
+            finished_at=datetime.fromisoformat(d["finished_at"]) if d.get("finished_at") else None,
+        )
+
+        agents_res = await self._http.get(f"/tasks/{task_id}/agents")
+        if not agents_res.is_success:
+            raise APIError(agents_res.status_code, agents_res.text)
+
+        agent_objects = [
+            Agent(
+                http=self._http,
+                task_id=task_data.id,
+                data=AgentData(
+                    id=a["id"],
+                    task_id=a["task_id"],
+                    name=a["name"],
+                    role=a["role"],
+                    color=a["color"],
+                    status=AgentStatus(a["status"]),
+                    created_at=datetime.fromisoformat(a["created_at"]),
+                ),
+            )
+            for a in agents_res.json()
+        ]
+
+        return Task(
+            http=self._http,
+            frontend_url=self._frontend_url,
+            data=task_data,
+            agents=agent_objects,
+        )
+
     async def aclose(self) -> None:
         await self._http.aclose()

@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, Query
-from src.apis.deps import SessionDep, APIKeyUser, CurrentUser
-from src.models.schemas import (
+from denview.apis.deps import SessionDep, APIKeyUser, CurrentUser
+from denview.models.schemas import (
     TaskCreate, TaskRead, TaskStatusUpdate,
     AgentWorkSummary, AgentState, TaskState,
 )
-from src.crud.task import create_task, get_task, list_tasks, update_task_status, get_task_by_token
-from src.crud.agent import list_agents_by_task
-from src.crud.agent_work import get_current_work, list_works_by_agent
+from denview.crud.task import create_task, get_task, list_tasks, update_task_status, get_task_by_token
+from denview.crud.agent import list_agents_by_task
+from denview.crud.agent_work import get_current_work, list_works_by_agent
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 

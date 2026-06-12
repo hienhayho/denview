@@ -2,9 +2,9 @@ from datetime import date
 from fastapi import APIRouter, HTTPException, Query
 from sqlmodel import select, func
 from pydantic import BaseModel
-from src.apis.deps import SessionDep, CurrentUser
-from src.models.task import Task
-from src.models.user import User
+from denview.apis.deps import SessionDep, CurrentUser
+from denview.models.task import Task
+from denview.models.user import User
 
 router = APIRouter(prefix="/stats", tags=["stats"])
 

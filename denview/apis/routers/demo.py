@@ -3,12 +3,12 @@ import random
 
 from fastapi import APIRouter, BackgroundTasks
 from pydantic import BaseModel
-from src.apis.deps import SessionDep, APIKeyUser
-from src.models.schemas import TaskCreate, AgentCreate, AgentWorkCreate, AgentWorkUpdate, TaskStatusUpdate
-from src.crud.task import create_task, get_task, update_task_status
-from src.crud.agent import list_agents_by_task
-from src.crud.agent_work import create_agent_work, update_agent_work, get_agent_work
-from src.database.engine import engine
+from denview.apis.deps import SessionDep, APIKeyUser
+from denview.models.schemas import TaskCreate, AgentCreate, AgentWorkCreate, AgentWorkUpdate, TaskStatusUpdate
+from denview.crud.task import create_task, get_task, update_task_status
+from denview.crud.agent import list_agents_by_task
+from denview.crud.agent_work import create_agent_work, update_agent_work, get_agent_work
+from denview.database.engine import engine
 from sqlmodel import Session
 
 router = APIRouter(prefix="/demo", tags=["demo"])

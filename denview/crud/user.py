@@ -2,9 +2,9 @@ import secrets
 from datetime import datetime
 from typing import Optional
 from sqlmodel import Session, select
-from src.models.user import User, APIKey
-from src.models.user_schemas import UserCreate, UserUpdate, APIKeyCreate
-from src.core.security import hash_password
+from denview.models.user import User, APIKey
+from denview.models.user_schemas import UserCreate, UserUpdate, APIKeyCreate
+from denview.core.security import hash_password
 
 
 def create_user(session: Session, data: UserCreate) -> User:

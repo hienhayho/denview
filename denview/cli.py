@@ -10,7 +10,7 @@ class CLI:
     ) -> None:
         """Start the DenView server."""
         import uvicorn
-        uvicorn.run("src.main:app", host=host, port=port, reload=reload)
+        uvicorn.run("denview.main:app", host=host, port=port, reload=reload)
 
 
 def main() -> None:

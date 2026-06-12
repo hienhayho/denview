@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+dist/
+*.egg-info/
+
+# Local dev
+*.db
+*.db-shm
+*.db-wal
+
+# UI (built separately)
+ui/
+
+# Repo noise
+.git/
+.claude/
+.github/
+*.md
+!README.md

@@ -1,6 +1,6 @@
 import asyncio
 import random
-from src.sdk import DenView
+from denview.sdk import DenView
 
 API_KEY = ""
 
@@ -56,7 +56,7 @@ async def main() -> None:
     dv = DenView(
         api_key=API_KEY,
         backend_url="http://localhost:8004",
-        frontend_url="http://localhost:3000",
+        frontend_url="http://localhost:3009",
     )
 
     print("Creating task…")

@@ -2,10 +2,10 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, Cookie, Security
 from fastapi.security import APIKeyHeader
 from sqlmodel import Session
-from src.database.engine import get_session
-from src.core.security import decode_access_token
-from src.crud.user import get_user, get_api_key_by_value, touch_api_key
-from src.models.user import User, APIKey
+from denview.database.engine import get_session
+from denview.core.security import decode_access_token
+from denview.crud.user import get_user, get_api_key_by_value, touch_api_key
+from denview.models.user import User, APIKey
 
 SessionDep = Annotated[Session, Depends(get_session)]
 

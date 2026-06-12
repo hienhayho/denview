@@ -1,8 +1,8 @@
 import os
 from sqlmodel import Session
-from src.crud.user import get_user_by_username, create_user
-from src.models.user_schemas import UserCreate
-from src.core.logging import get_logger
+from denview.crud.user import get_user_by_username, create_user
+from denview.models.user_schemas import UserCreate
+from denview.core.logging import get_logger
 
 log = get_logger(__name__)
 

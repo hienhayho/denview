@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from src.apis.deps import SessionDep, APIKeyUser
-from src.models.schemas import AgentRead, AgentStatusUpdate, AgentWorkCreate, AgentWorkRead, AgentWorkUpdate
-from src.crud.agent import get_agent, list_agents_by_task, update_agent_status
-from src.crud.agent_work import create_agent_work, get_agent_work, list_works_by_agent, update_agent_work
-from src.crud.task import get_task
+from denview.apis.deps import SessionDep, APIKeyUser
+from denview.models.schemas import AgentRead, AgentStatusUpdate, AgentWorkCreate, AgentWorkRead, AgentWorkUpdate
+from denview.crud.agent import get_agent, list_agents_by_task, update_agent_status
+from denview.crud.agent_work import create_agent_work, get_agent_work, list_works_by_agent, update_agent_work
+from denview.crud.task import get_task
 
 router = APIRouter(prefix="/tasks/{task_id}/agents", tags=["agents"])
 

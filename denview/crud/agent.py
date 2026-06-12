@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlmodel import Session, select
-from src.models.task import Agent
-from src.models.schemas import AgentCreate, AgentStatusUpdate
+from denview.models.task import Agent
+from denview.models.schemas import AgentCreate, AgentStatusUpdate
 
 
 def create_agent(session: Session, task_id: int, data: AgentCreate) -> Agent:

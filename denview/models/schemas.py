@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-from src.models.task import AgentStatus, TaskStatus, WorkStatus
+from denview.models.task import AgentStatus, TaskStatus, WorkStatus
 
 
 # ── Task ──────────────────────────────────────────────────────────────────────
