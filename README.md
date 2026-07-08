@@ -161,11 +161,21 @@ await dv.aclose()
 
 ### 3. Resume an existing task
 
+`task_id` is returned when you call `start_task`. Persist it (DB, env var, file) to resume later:
+
 ```python
-task = await dv.get_task(task_id=42)
+# first run — save the id
+task = await dv.start_task(name="My Task", agents=[...])
+saved_task_id = task.id          # store this
 print(task.embed_url)
-print(task.data.status)
+
+# later run — reload by id
+task = await dv.get_task(task_id=saved_task_id)
+print(task.embed_url)
+print(task.data.status)          # 'running' | 'done' | 'failed'
 ```
+
+You can also find task IDs in the admin UI at `/tasks` or via `GET /tasks` with your API key.
 
 ### 4. Embed the office view
 
