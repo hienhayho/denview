@@ -138,6 +138,7 @@ task = await dv.start_task(
     ],
 )
 
+print(task.id) # task id 
 print(task.embed_url)  # shareable iframe URL
 
 agent = await task.agent(name="Alice")
