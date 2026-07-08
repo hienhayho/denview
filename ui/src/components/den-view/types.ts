@@ -12,6 +12,7 @@ export interface AgentState {
   role: string
   color: string
   status: 'working' | 'idle'
+  note: string | null
   current_work: WorkSummary | null
   recent_works: WorkSummary[]
 }

@@ -73,6 +73,7 @@ class DenView:
                     color=a["color"],
                     status=AgentStatus(a["status"]),
                     created_at=datetime.fromisoformat(a["created_at"]),
+                    note=a.get("note"),
                 ),
             )
             for a in agents_res.json()
@@ -118,6 +119,7 @@ class DenView:
                     color=a["color"],
                     status=AgentStatus(a["status"]),
                     created_at=datetime.fromisoformat(a["created_at"]),
+                    note=a.get("note"),
                 ),
             )
             for a in agents_res.json()

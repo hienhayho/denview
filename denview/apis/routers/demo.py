@@ -6,7 +6,8 @@ from pydantic import BaseModel
 from denview.apis.deps import SessionDep, APIKeyUser
 from denview.models.schemas import TaskCreate, AgentCreate, AgentWorkCreate, AgentWorkUpdate, TaskStatusUpdate
 from denview.crud.task import create_task, get_task, update_task_status
-from denview.crud.agent import list_agents_by_task
+from denview.crud.agent import list_agents_by_task, update_agent_note
+from denview.models.schemas import AgentNoteUpdate
 from denview.crud.agent_work import create_agent_work, update_agent_work, get_agent_work
 from denview.database.engine import engine
 from sqlmodel import Session
@@ -21,6 +22,15 @@ DEMO_AGENTS = [
     {"name": "Eve",   "role": "Analyst",    "color": "#facc15"},
     {"name": "Frank", "role": "Writer",     "color": "#ef4444"},
 ]
+
+DEMO_NOTES = {
+    "Alice": "## Alice — Researcher\n\nFocused on **literature review** and gathering context.\n\n- Scanning 12 recent papers\n- Summarizing key findings\n- Flagging contradictions",
+    "Bob":   "## Bob — Coder\n\nImplementing the core pipeline.\n\n```python\ndef process(data):\n    return transform(data)\n```\n\n- Auth module refactor in progress\n- 3 PRs open",
+    "Carol": "## Carol — Reviewer\n\nCode review + QA pass.\n\n> No bugs found yet, but test coverage is low.\n\n- Reviewing Bob's PRs\n- Writing missing unit tests",
+    "Dave":  "## Dave — Planner\n\nManaging sprint backlog and priorities.\n\n| Priority | Task |\n|----------|------|\n| High | Auth refactor |\n| Med  | Dashboard metrics |\n| Low  | Docs update |",
+    "Eve":   "## Eve — Analyst\n\nRunning data analysis on cohort retention.\n\n- Cohort size: **4,200 users**\n- Retention D7: 62%\n- Identified drop-off at onboarding step 3",
+    "Frank": "## Frank — Writer\n\nDrafting documentation and release notes.\n\n- API reference: 80% done\n- README updated\n- Changelog pending",
+}
 
 WORK_ITEMS = [
     "refactoring auth module", "patching merge conflict", "writing migration script",
@@ -58,6 +68,10 @@ async def _run_demo(task_id: int, user_id: int) -> None:
     with Session(engine) as session:
         agents = list_agents_by_task(session, task_id)
         agent_ids = [(a.id, a.name) for a in agents]
+        for agent in agents:
+            note = DEMO_NOTES.get(agent.name)
+            if note:
+                update_agent_note(session, agent, AgentNoteUpdate(note=note))
 
     async def staggered(agent_id: int, delay: float) -> None:
         await asyncio.sleep(delay)

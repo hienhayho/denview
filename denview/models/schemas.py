@@ -40,6 +40,10 @@ class AgentStatusUpdate(BaseModel):
     status: AgentStatus
 
 
+class AgentNoteUpdate(BaseModel):
+    note: str | None
+
+
 class AgentRead(BaseModel):
     id: int
     task_id: int
@@ -47,6 +51,7 @@ class AgentRead(BaseModel):
     role: str
     color: str
     status: AgentStatus
+    note: str | None
     created_at: datetime
 
 
@@ -86,6 +91,7 @@ class AgentState(BaseModel):
     role: str
     color: str
     status: AgentStatus
+    note: Optional[str]
     current_work: Optional[AgentWorkSummary]
     recent_works: list[AgentWorkSummary]
 

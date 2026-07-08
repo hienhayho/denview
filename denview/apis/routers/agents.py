@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from denview.apis.deps import SessionDep, APIKeyUser
-from denview.models.schemas import AgentRead, AgentStatusUpdate, AgentWorkCreate, AgentWorkRead, AgentWorkUpdate
-from denview.crud.agent import get_agent, list_agents_by_task, update_agent_status
+from denview.models.schemas import AgentRead, AgentStatusUpdate, AgentNoteUpdate, AgentWorkCreate, AgentWorkRead, AgentWorkUpdate
+from denview.crud.agent import get_agent, list_agents_by_task, update_agent_status, update_agent_note
 from denview.crud.agent_work import create_agent_work, get_agent_work, list_works_by_agent, update_agent_work
 from denview.crud.task import get_task
 
@@ -35,6 +35,12 @@ def list_agents(task_id: int, session: SessionDep, user: APIKeyUser):
 def set_agent_status(task_id: int, agent_id: int, data: AgentStatusUpdate, session: SessionDep, user: APIKeyUser):
     agent = _resolve_agent(session, task_id, agent_id, user.id)
     return update_agent_status(session, agent, data)
+
+
+@router.patch("/{agent_id}/note", response_model=AgentRead)
+def set_agent_note(task_id: int, agent_id: int, data: AgentNoteUpdate, session: SessionDep, user: APIKeyUser):
+    agent = _resolve_agent(session, task_id, agent_id, user.id)
+    return update_agent_note(session, agent, data)
 
 
 @router.post("/{agent_id}/works", response_model=AgentWorkRead)

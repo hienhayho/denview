@@ -55,6 +55,14 @@ class Agent:
             await self._set_status(status=AgentStatus.idle)
         return work
 
+    async def set_note(self, note: str | None) -> None:
+        res = await self._http.patch(
+            f"/tasks/{self._task_id}/agents/{self._data.id}/note",
+            json={"note": note},
+        )
+        if not res.is_success:
+            raise APIError(res.status_code, res.text)
+
     async def _set_status(self, *, status: AgentStatus) -> None:
         res = await self._http.patch(
             f"/tasks/{self._task_id}/agents/{self._data.id}/status",

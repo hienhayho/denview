@@ -50,6 +50,7 @@ class AgentData:
     color: str
     status: AgentStatus
     created_at: datetime
+    note: Optional[str] = None
 
 
 @dataclass

@@ -78,6 +78,7 @@ def get_state(
             role=agent.role,
             color=agent.color,
             status=agent.status,
+            note=agent.note,
             current_work=current_summary,
             recent_works=recent_summaries,
         ))

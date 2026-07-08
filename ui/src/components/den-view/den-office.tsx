@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { Workstation } from './workstation'
 import { CoffeeArea, SofaArea, WindowArea } from './shared-areas'
 import { Tooltip, type TooltipData } from './tooltip'
+import { AgentNoteModal } from './agent-note-modal'
 import { DEN_CSS } from './den-styles'
 import { AWAY_KINDS, WORKING_KINDS, IDLE_KINDS, type Activity, type AgentState, type TaskState } from './types'
 import { pick } from './constants'
@@ -24,6 +25,7 @@ function getActivity(agent: AgentState): Activity {
 export function DenOffice({ state }: { state: TaskState }) {
   const [, forceUpdate] = useState(0)
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
+  const [noteAgent, setNoteAgent] = useState<AgentState | null>(null)
   const activityMapRef = useRef<Map<number, { activity: Activity; since: number; nextFlipAt: number }>>(new Map())
 
   const syncActivities = useCallback(() => {
@@ -98,12 +100,23 @@ export function DenOffice({ state }: { state: TaskState }) {
                   const activity = (entry?.activity ?? 'code') as Activity
                   const away = AWAY_KINDS.includes(activity as typeof AWAY_KINDS[number])
                   return (
-                    <div key={agent.id} className="cell" style={{
-                      borderRadius: 8,
-                      background: agent.status === 'working' ? 'transparent' : 'rgba(20,18,14,0.03)',
-                    }}>
+                    <div
+                      key={agent.id}
+                      className="cell"
+                      style={{
+                        borderRadius: 8,
+                        background: agent.status === 'working' ? 'transparent' : 'rgba(20,18,14,0.03)',
+                        cursor: agent.note ? 'pointer' : 'default',
+                      }}
+                      onClick={() => agent.note && setNoteAgent(agent)}
+                    >
                       <Workstation agent={agent} activity={activity} away={away} onHover={handleHover} onLeave={handleLeave}/>
-                      <div className="cell-name">{agent.name}</div>
+                      <div className="cell-name">
+                        {agent.name}
+                        {agent.note && (
+                          <span style={{ marginLeft: 4, opacity: 0.4, fontSize: 10 }}>●</span>
+                        )}
+                      </div>
                     </div>
                   )
                 })}
@@ -119,6 +132,7 @@ export function DenOffice({ state }: { state: TaskState }) {
         </main>
       </div>
       <Tooltip data={tooltip}/>
+      {noteAgent && <AgentNoteModal agent={noteAgent} onClose={() => setNoteAgent(null)}/>}
     </>
   )
 }

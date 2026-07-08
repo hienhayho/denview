@@ -89,6 +89,10 @@ export default function TasksPage() {
                       textTransform: 'uppercase',
                       color: '#807a6f',
                       whiteSpace: 'nowrap',
+                      position: 'sticky',
+                      top: 0,
+                      background: '#fff',
+                      zIndex: 1,
                     }}>{h}</th>
                   ))}
                 </tr>

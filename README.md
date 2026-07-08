@@ -141,6 +141,17 @@ task = await dv.start_task(
 print(task.embed_url)  # shareable iframe URL
 
 agent = await task.agent(name="Alice")
+
+# set a markdown note — visible when clicking the agent in the office view
+await agent.set_note("""
+## Alice — Researcher
+
+Scanning papers and summarizing findings.
+
+- 12 papers in queue
+- Flagging contradictions
+""")
+
 async with agent.working("refactoring auth module"):
     await do_work()   # marks work failed automatically on exception
 

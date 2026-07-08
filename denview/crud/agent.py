@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlmodel import Session, select
 from denview.models.task import Agent
-from denview.models.schemas import AgentCreate, AgentStatusUpdate
+from denview.models.schemas import AgentCreate, AgentStatusUpdate, AgentNoteUpdate
 
 
 def create_agent(session: Session, task_id: int, data: AgentCreate) -> Agent:
@@ -20,6 +20,14 @@ def list_agents_by_task(session: Session, task_id: int) -> list[Agent]:
 
 def update_agent_status(session: Session, agent: Agent, data: AgentStatusUpdate) -> Agent:
     agent.status = data.status
+    session.add(agent)
+    session.commit()
+    session.refresh(agent)
+    return agent
+
+
+def update_agent_note(session: Session, agent: Agent, data: AgentNoteUpdate) -> Agent:
+    agent.note = data.note
     session.add(agent)
     session.commit()
     session.refresh(agent)

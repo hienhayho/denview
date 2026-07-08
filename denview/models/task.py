@@ -44,6 +44,7 @@ class Agent(SQLModel, table=True):
     role: str
     color: str
     status: AgentStatus = AgentStatus.idle
+    note: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 

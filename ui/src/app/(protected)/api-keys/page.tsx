@@ -23,6 +23,7 @@ export default function ApiKeysPage() {
   const [newKeyName, setNewKeyName] = useState('')
   const [newKey, setNewKey] = useState<NewKey | null>(null)
   const [revoking, setRevoking] = useState<number | null>(null)
+  const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const nameInputRef = useRef<HTMLInputElement>(null)
 
@@ -131,15 +132,22 @@ export default function ApiKeysPage() {
               {newKey.key}
             </code>
             <button
-              onClick={() => navigator.clipboard.writeText(newKey.key)}
+              onClick={() => {
+                navigator.clipboard.writeText(newKey.key)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              }}
               style={{
                 padding: '7px 12px', fontSize: 12, fontWeight: 500,
-                background: '#fff', border: '1px solid #86efac',
-                borderRadius: 6, cursor: 'pointer', color: '#15803d',
+                background: copied ? '#f0fdf4' : '#fff',
+                border: `1px solid ${copied ? '#22c55e' : '#86efac'}`,
+                borderRadius: 6, cursor: 'pointer',
+                color: copied ? '#15803d' : '#15803d',
                 fontFamily: 'inherit', flexShrink: 0,
+                transition: 'all 0.15s',
               }}
             >
-              Copy
+              {copied ? '✓ Copied' : 'Copy'}
             </button>
           </div>
         </div>
