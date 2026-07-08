@@ -22,7 +22,7 @@ def get_all(session: SessionDep, user: CurrentUser):
 
 
 @router.get("/{task_id}", response_model=TaskRead)
-def get_one(task_id: int, session: SessionDep, user: CurrentUser):
+def get_one(task_id: int, session: SessionDep, user: APIKeyUser):
     task = get_task(session, task_id)
     if not task or task.user_id != user.id:
         raise HTTPException(status_code=404, detail="Task not found")

@@ -1,18 +1,17 @@
 import asyncio
 import random
 
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Security
+from fastapi.security import APIKeyHeader
 from pydantic import BaseModel
 from denview.apis.deps import SessionDep, APIKeyUser
-from denview.models.schemas import TaskCreate, AgentCreate, AgentWorkCreate, AgentWorkUpdate, TaskStatusUpdate
-from denview.crud.task import create_task, get_task, update_task_status
-from denview.crud.agent import list_agents_by_task, update_agent_note
-from denview.models.schemas import AgentNoteUpdate
-from denview.crud.agent_work import create_agent_work, update_agent_work, get_agent_work
-from denview.database.engine import engine
-from sqlmodel import Session
+from denview.models.schemas import TaskCreate, AgentCreate
+from denview.crud.task import create_task
+from denview.sdk.client import DenView
 
 router = APIRouter(prefix="/demo", tags=["demo"])
+
+_api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
 DEMO_AGENTS = [
     {"name": "Alice", "role": "Researcher", "color": "#d95f12"},
@@ -42,62 +41,63 @@ WORK_ITEMS = [
 ]
 
 
+class DemoRequest(BaseModel):
+    backend_url: str = "http://localhost:8000"
+    frontend_url: str = "http://localhost:3000"
+
+
 class DemoResponse(BaseModel):
     task_id: int
     view_token: str
+    embed_url: str
 
 
-async def _run_agent(task_id: int, agent_id: int, rounds: int) -> None:
-    for _ in range(rounds):
-        label = random.choice(WORK_ITEMS)
-        with Session(engine) as session:
-            work = create_agent_work(session, agent_id=agent_id, task_id=task_id, data=AgentWorkCreate(label=label))
-            work_id = work.id
+async def _run_demo(task_id: int, api_key: str, backend_url: str) -> None:
+    dv = DenView(api_key=api_key, backend_url=backend_url)
+    try:
+        task = await dv.get_task(task_id)
 
-        await asyncio.sleep(random.uniform(2.0, 6.0))
+        # set notes on all agents
+        for agent_name, note in DEMO_NOTES.items():
+            try:
+                agent = await task.agent(name=agent_name)
+                await agent.set_note(note)
+            except Exception:
+                pass
 
-        with Session(engine) as session:
-            work = get_agent_work(session, work_id)
-            if work:
-                update_agent_work(session, work, AgentWorkUpdate(status="completed"))
+        async def run_agent(agent_name: str, delay: float) -> None:
+            await asyncio.sleep(delay)
+            agent = await task.agent(name=agent_name)
+            for _ in range(random.randint(3, 7)):
+                label = random.choice(WORK_ITEMS)
+                async with agent.working(label):
+                    await asyncio.sleep(random.uniform(2.0, 6.0))
+                await asyncio.sleep(random.uniform(0.5, 2.0))
 
-        await asyncio.sleep(random.uniform(0.5, 2.0))
+        agent_names = [a["name"] for a in DEMO_AGENTS]
+        await asyncio.gather(*[
+            run_agent(name, i * 0.8)
+            for i, name in enumerate(agent_names)
+        ])
 
-
-async def _run_demo(task_id: int, user_id: int) -> None:
-    with Session(engine) as session:
-        agents = list_agents_by_task(session, task_id)
-        agent_ids = [(a.id, a.name) for a in agents]
-        for agent in agents:
-            note = DEMO_NOTES.get(agent.name)
-            if note:
-                update_agent_note(session, agent, AgentNoteUpdate(note=note))
-
-    async def staggered(agent_id: int, delay: float) -> None:
-        await asyncio.sleep(delay)
-        await _run_agent(task_id, agent_id, rounds=random.randint(3, 7))
-
-    await asyncio.gather(*[
-        staggered(aid, i * 0.8)
-        for i, (aid, _) in enumerate(agent_ids)
-    ])
-
-    with Session(engine) as session:
-        task = get_task(session, task_id)
-        if task:
-            update_task_status(session, task, TaskStatusUpdate(status="done"))
+        await task.finish()
+    finally:
+        await dv.aclose()
 
 
 @router.post("/run", response_model=DemoResponse)
 def run_demo(
+    body: DemoRequest,
     background_tasks: BackgroundTasks,
     session: SessionDep,
     user: APIKeyUser,
+    api_key: str = Security(_api_key_header),
 ):
     task = create_task(session, user_id=user.id, data=TaskCreate(
         name="Demo Run",
         description="Simulated agents — triggered from demo page",
         agents=[AgentCreate(**a) for a in DEMO_AGENTS],
     ))
-    background_tasks.add_task(_run_demo, task.id, user.id)
-    return DemoResponse(task_id=task.id, view_token=task.view_token)
+    background_tasks.add_task(_run_demo, task.id, api_key, body.backend_url)
+    embed_url = f"{body.frontend_url}/view/{task.id}?token={task.view_token}"
+    return DemoResponse(task_id=task.id, view_token=task.view_token, embed_url=embed_url)

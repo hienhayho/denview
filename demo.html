@@ -88,14 +88,15 @@ async function runDemo() {
     const res = await fetch(`${backendUrl}/demo/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+      body: JSON.stringify({ backend_url: backendUrl, frontend_url: frontendUrl }),
     })
     if (!res.ok) {
       const err = await res.json().catch(() => ({}))
       throw new Error(err.detail ?? `Error ${res.status}`)
     }
-    const { task_id, view_token } = await res.json()
+    const { task_id, view_token, embed_url } = await res.json()
 
-    const embedUrl = `${frontendUrl}/view/${task_id}?token=${encodeURIComponent(view_token)}`
+    const embedUrl = embed_url
     document.getElementById('empty').style.display = 'none'
     const frame = document.getElementById('frame')
     frame.src = embedUrl
