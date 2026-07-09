@@ -125,9 +125,9 @@ export function DenOffice({ state }: { state: TaskState }) {
           </div>
 
           <div className="legend">
-            <span><span className="legend-dot" style={{ background: '#22c55e' }}/>working</span>
-            <span><span className="legend-dot" style={{ background: '#f59e0b' }}/>idle at desk</span>
-            <span><span className="legend-dot" style={{ background: '#3b82f6' }}/>away</span>
+            <span><span className="legend-dot" style={{ background: '#22c55e' }}/>đang làm việc</span>
+            <span><span className="legend-dot" style={{ background: '#f59e0b' }}/>nghỉ tại bàn</span>
+            <span><span className="legend-dot" style={{ background: '#3b82f6' }}/>vắng mặt</span>
           </div>
         </main>
       </div>

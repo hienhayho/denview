@@ -11,7 +11,7 @@ export function CoffeeArea({ visitors, onHover, onLeave }: { visitors: AgentStat
   const slots = [{ x: 130, y: 130 }, { x: 230, y: 130 }]
   return (
     <div className="area" style={{ position: 'relative' }}>
-      <div className="area-label">Pantry</div>
+      <div className="area-label">Căng-tin</div>
       <svg viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
         <rect x="20" y="10" width="320" height="60" rx="6" fill="#fff" stroke="#e3dfd4" strokeWidth="1.2"/>
         <rect x="20" y="68" width="320" height="5" rx="2" fill="rgba(20,18,14,0.06)"/>
@@ -53,7 +53,7 @@ export function SofaArea({ visitors, onHover, onLeave }: { visitors: AgentState[
   const slots = [{ x: 110, y: 95 }, { x: 180, y: 95 }, { x: 250, y: 95 }]
   return (
     <div className="area" style={{ position: 'relative' }}>
-      <div className="area-label">Lounge</div>
+      <div className="area-label">Phòng nghỉ</div>
       <svg viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
         <rect x="40" y="40" width="280" height="140" rx="14" fill="#f3eee2"/>
         <rect x="48" y="48" width="264" height="124" rx="10" fill="none" stroke="#e0d8c4" strokeWidth="1.5" strokeDasharray="3 4"/>
@@ -84,7 +84,7 @@ export function WindowArea({ visitors, onHover, onLeave }: { visitors: AgentStat
   const slots = [{ x: 130, y: 110 }, { x: 230, y: 110 }]
   return (
     <div className="area" style={{ position: 'relative' }}>
-      <div className="area-label">Window</div>
+      <div className="area-label">Cửa sổ</div>
       <svg viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }}>
         <defs>
           <linearGradient id="sunlight" x1="0" y1="0" x2="0" y2="1">

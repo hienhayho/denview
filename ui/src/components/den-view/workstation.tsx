@@ -133,7 +133,7 @@ export function Workstation({
           <rect x="-32" y="-9" width="64" height="18" rx="9" fill="#fff" stroke="#e3dfd4" strokeWidth="1"/>
           <circle cx="-22" cy="0" r="2.6" fill={agent.color}/>
           <text x="-15" y="3" fontSize="9" fill="#807a6f" fontFamily="ui-sans-serif, system-ui" fontWeight="500">
-            away · {activity}
+            vắng · {activity}
           </text>
         </g>
       )}
